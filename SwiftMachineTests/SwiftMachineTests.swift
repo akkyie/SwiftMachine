@@ -11,14 +11,6 @@ import XCTest
 
 class SwiftMachineTests: XCTestCase {
 
-	override func setUp() {
-		super.setUp()
-	}
-
-	override func tearDown() {
-		super.tearDown()
-	}
-
 	func testAND() {
 		let perceptron = Perceptron()
 

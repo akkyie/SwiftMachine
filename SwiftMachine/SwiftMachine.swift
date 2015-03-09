@@ -8,6 +8,8 @@
 
 import Foundation
 
+import Accelerate
+
 private typealias Function = (Double) -> Double
 
 private enum Functions {
@@ -68,16 +70,22 @@ private struct Math {
 private class Neuron {
 
 	var activation: Function
-	var weight: [Double]
+	var weight: la_object_t
 
-	init(activation: Function, weight: [Double]) {
+	init(activation: Function, weight: la_object_t) {
 		self.activation = activation
 		self.weight = weight
 	}
 
 	func propagate(input: [Double]) -> Double {
-		assert(input.count == weight.count, "the number of input must equal to the number of weight")
-		return self.activation(Math.matrixElementwiseMultiply(input, self.weight).reduce(0.0, combine: +))
+		//		assert(input.count == weight.count, "the number of input must equal to the number of weight")
+		let input = la_matrix_from_double_buffer(input, la_count_t(input.count), 1, 1, la_hint_t(LA_NO_HINT), la_attribute_t(LA_DEFAULT_ATTRIBUTES))
+		let product = la_matrix_product(input, self.weight)
+		let identity = la_matrix_from_double_buffer([Double](count: Int(la_matrix_rows(product)), repeatedValue: 1.0), 1, la_matrix_rows(product), la_matrix_rows(product), la_hint_t(LA_NO_HINT), la_attribute_t(LA_DEFAULT_ATTRIBUTES))
+		let sumMatrix = la_matrix_product(product, identity)
+		var elements = [Double](count: Int(la_matrix_rows(sumMatrix) * la_matrix_cols(sumMatrix)), repeatedValue: Double(0.0))
+		la_matrix_to_double_buffer(&elements, la_matrix_rows(sumMatrix), sumMatrix)
+		return self.activation(elements[0])
 	}
 
 }
@@ -90,7 +98,7 @@ public class Perceptron {
 
 	}
 
-	public func train(#inputs: [[Double]], outputs: [Double], learningRate: Double, epsilon: Double) -> [Double] {
+	public func train(#inputs: [[Double]], outputs: [Double], learningRate: Double, epsilon: Double) {
 		assert(inputs.count == outputs.count, "the number of input must equal to the number of output")
 
 		let inputs = inputs.map({ [1.0] + $0 })
@@ -99,27 +107,24 @@ public class Perceptron {
 			var weight = inputs[0].map({ (_, index) -> Double in
 				return Double(arc4random_uniform(UInt32.max)) / Double(UInt32.max)
 			})
-			return Neuron(activation: Functions.Step(t: 0.0).function, weight: weight)
+			return Neuron(activation: Functions.Step(t: 0.0).function, weight: la_matrix_from_double_buffer(weight, la_count_t(weight.count), 1, 1, la_hint_t(LA_NO_HINT), la_attribute_t(LA_DEFAULT_ATTRIBUTES)))
 			}()
 
 		var epoch = 0;
-		var oldWeight: [Double]!
+		var oldWeight: la_object_t
 		do {
 			oldWeight = self.neuron.weight
 			for i in 0 ..< inputs.count {
-				let input = inputs[i]
+				let input = la_matrix_from_double_buffer(inputs[i], la_count_t(inputs[i].count), 1, 1, la_hint_t(LA_NO_HINT), la_attribute_t(LA_DEFAULT_ATTRIBUTES))
 				let expected = outputs[i]
-				let output = self.neuron.propagate(input)
+				let output = self.neuron.propagate(inputs[i])
 				if abs(expected - output) >= abs(epsilon) {
-					self.neuron.weight = Math.matrixAdd(
-						self.neuron.weight,
-						Math.matrixScalarMultiply(
-							input,
-							learningRate * (expected - output)))
+					let error = la_scale_with_double(input, learningRate * (expected - output))
+					let newWeight = la_sum(self.neuron.weight, error)
+					self.neuron.weight = newWeight
 				}
 			}
-		} while oldWeight != self.neuron.weight
-		return self.neuron.weight
+		} while la_norm_as_double(la_difference(oldWeight, self.neuron.weight), la_norm_t(LA_L1_NORM)) > 0
 	}
 
 	public func test(input: [Double]) -> Double {
