@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "66C9A3961AAD0CAE00CFB1E0"
+               BlueprintIdentifier = "66F23E441AAEEAF100FCD74A"
                BuildableName = "SwiftMachine.framework"
                BlueprintName = "SwiftMachine_iOS"
                ReferencedContainer = "container:SwiftMachine.xcodeproj">
@@ -28,7 +28,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "66C9A3A01AAD0CAE00CFB1E0"
+               BlueprintIdentifier = "66F23E4E1AAEEAF100FCD74A"
                BuildableName = "SwiftMachine_iOSTests.xctest"
                BlueprintName = "SwiftMachine_iOSTests"
                ReferencedContainer = "container:SwiftMachine.xcodeproj">
@@ -46,7 +46,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "66C9A3A01AAD0CAE00CFB1E0"
+               BlueprintIdentifier = "66F23E4E1AAEEAF100FCD74A"
                BuildableName = "SwiftMachine_iOSTests.xctest"
                BlueprintName = "SwiftMachine_iOSTests"
                ReferencedContainer = "container:SwiftMachine.xcodeproj">
@@ -56,7 +56,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "66C9A3961AAD0CAE00CFB1E0"
+            BlueprintIdentifier = "66F23E441AAEEAF100FCD74A"
             BuildableName = "SwiftMachine.framework"
             BlueprintName = "SwiftMachine_iOS"
             ReferencedContainer = "container:SwiftMachine.xcodeproj">
@@ -75,7 +75,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "66C9A3961AAD0CAE00CFB1E0"
+            BlueprintIdentifier = "66F23E441AAEEAF100FCD74A"
             BuildableName = "SwiftMachine.framework"
             BlueprintName = "SwiftMachine_iOS"
             ReferencedContainer = "container:SwiftMachine.xcodeproj">
@@ -93,7 +93,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "66C9A3961AAD0CAE00CFB1E0"
+            BlueprintIdentifier = "66F23E441AAEEAF100FCD74A"
             BuildableName = "SwiftMachine.framework"
             BlueprintName = "SwiftMachine_iOS"
             ReferencedContainer = "container:SwiftMachine.xcodeproj">
